@@ -1,5 +1,6 @@
 package co.analisys.biblioteca.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -7,21 +8,28 @@ import java.util.List;
 
 @Entity
 @Data
+@Schema(description = "Entidad que representa un libro en el catálogo de la biblioteca")
 public class Libro {
     @EmbeddedId
+    @Schema(description = "Identificador único del libro")
     private LibroId id;
 
+    @Schema(description = "Título del libro", example = "Cien años de soledad")
     private String titulo;
 
     @Embedded
+    @Schema(description = "Número ISBN del libro")
     private ISBN isbn;
 
     @Embedded
+    @Schema(description = "Categoría o género del libro")
     private Categoria categoria;
 
+    @Schema(description = "Indica si el libro está disponible para préstamo", example = "true")
     private boolean disponible;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @Schema(description = "Lista de autores del libro")
     private List<Autor> autores;
 
     public void marcarComoDisponible() {
@@ -34,5 +42,9 @@ public class Libro {
 
     public void actualizarCategoria(Categoria nuevaCategoria) {
         this.categoria = nuevaCategoria;
+    }
+
+    public boolean isDisponible() {
+        return this.disponible;
     }
 }
